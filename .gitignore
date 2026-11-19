@@ -1,0 +1,9 @@
+node_modules/
+dist/
+ios/
+playwright-report/
+test-results/
+.DS_Store
+*.p12
+*.mobileprovision
+.env

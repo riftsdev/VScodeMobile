@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10131b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="KG Code: projetos, pastas e editor de código para iPhone e desktop.">
+<title>KG Code • Workspace</title>
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<header class="topbar">
+<button class="brand" data-action="sidebar" title="Abrir explorador"><span class="brand-icon">〈/〉</span><strong>KG Code</strong><span class="version">2.0</span></button>
+<button class="command-trigger" data-action="commands">Buscar comandos <kbd>⌘ K</kbd></button>
+<div class="top-actions"><button data-action="save" title="Salvar • Ctrl/⌘ S">Salvar</button><button class="primary" data-action="run" title="Executar pasta • Ctrl/⌘ Enter">▶ Executar</button><button data-action="menu" aria-label="Mais ferramentas">•••</button></div>
+</header>
+<main class="workspace">
+<aside class="activity"><button data-action="sidebar" title="Explorador">▣</button><button data-action="search" title="Buscar no projeto">⌕</button><button data-action="github" title="GitHub">⑂</button><span></span><button data-action="settings" title="Configurações">⚙</button></aside>
+<aside id="sidebar">
+<div class="section-heading"><span>EXPLORADOR</span><button data-action="sidebar" class="mobile-only" aria-label="Fechar explorador">×</button></div>
+<div class="project-title"><span>Área de trabalho</span><button data-action="new-project" title="Criar projeto">＋ Projeto</button></div>
+<div class="tree-tools"><button data-action="new-file">＋ Arquivo</button><button data-action="new-folder">＋ Pasta</button><button data-action="import" title="Importar arquivos ou ZIP">Importar</button></div>
+<p class="hint">Toque em uma pasta e use ▶ para testá-la.</p>
+<div id="tree" role="tree" aria-label="Arquivos e pastas"></div>
+<div class="sidebar-footer"><span id="file-count"></span><button data-action="export">Exportar ZIP</button></div>
+</aside>
+<button id="sidebar-backdrop" data-action="sidebar" aria-label="Fechar explorador"></button>
+<section class="editor-pane">
+<div id="tabs" class="tabs" role="tablist" aria-label="Arquivos abertos"></div>
+<div class="breadcrumb"><span id="breadcrumb">Selecione um arquivo</span><button data-action="focus" title="Modo foco">⛶ Foco</button></div>
+<div class="editor-area"><textarea id="code" aria-label="Editor de código" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea><div id="asset-view" hidden></div></div>
+<div id="symbols" class="symbols"><button data-edit="undo">↶</button><button data-edit="redo">↷</button><button data-edit="tab">Tab</button><button data-edit="left">◀</button><button data-edit="right">▶</button><button data-symbol="&lt;">&lt;</button><button data-symbol="&gt;">&gt;</button><button data-symbol="{">{</button><button data-symbol="}">}</button><button data-symbol="(">(</button><button data-symbol=")">)</button><button data-symbol="[">[</button><button data-symbol="]">]</button><button data-symbol="=">=</button><button data-symbol=";">;</button><button data-symbol="&quot;">"</button><button data-symbol="'">'</button><button data-edit="selectAll">Selecionar tudo</button><button data-action="format">Formatar</button><button data-action="focus">Sair do foco</button></div>
+</section>
+<section id="output" class="output" aria-label="Execução do projeto">
+<div id="panel-grip" role="separator" aria-label="Redimensionar painel" tabindex="0"></div>
+<div class="output-bar"><div><button data-panel="preview" class="active">Prévia</button><button data-panel="console">Console <span id="log-count">0</span></button></div><div><button data-action="run" title="Recarregar">↻</button><button data-action="fullscreen" title="Expandir prévia">⛶</button><button data-action="toggle-output" title="Fechar painel">×</button></div></div>
+<div class="run-config"><label>Pasta <select id="run-root" aria-label="Pasta para executar"></select></label><label>Entrada <select id="run-entry" aria-label="Arquivo de entrada"></select></label><button data-action="set-root" title="Usar a pasta selecionada">Usar selecionada</button></div>
+<div id="preview-panel" class="panel-content"><div class="device-toolbar"><select id="device" aria-label="Tamanho da prévia"><option value="auto">Responsivo</option><option value="390">iPhone • 390px</option><option value="768">Tablet • 768px</option><option value="1280">Desktop • 1280px</option></select><span id="run-label">Pronto para executar</span></div><div id="frame-wrap"><iframe id="preview" title="Prévia isolada do projeto" sandbox="allow-scripts allow-forms allow-modals allow-pointer-lock" allow="fullscreen; gamepad; autoplay"></iframe><div id="preview-empty"><span>▶</span><h2>Seu próximo projeto começa aqui.</h2><p>Escolha a pasta e o HTML inicial.<br>O restante acompanha seu projeto.</p><button class="primary" data-action="run">Executar projeto</button></div></div></div>
+<div id="console-panel" class="panel-content" hidden><div class="console-tools"><span>Logs e erros da execução</span><button data-action="clear-console">Limpar</button><button data-action="stop">Parar</button></div><div id="logs" role="log" aria-live="polite"></div></div>
+</section>
+</main>
+<footer class="status"><span id="save-status">Iniciando…</span><span id="cursor">Lin 1, Col 1</span><span id="language">Texto</span><button data-action="toggle-output">Prévia / Console</button></footer>
+<nav class="mobile-nav"><button data-action="sidebar">▣<span>Arquivos</span></button><button data-action="search">⌕<span>Buscar</span></button><button data-action="run">▶<span>Executar</span></button><button data-action="console">⌘<span>Console</span></button><button data-action="menu">•••<span>Mais</span></button></nav>
+<dialog id="dialog"><div class="dialog-header"><h2 id="dialog-title"></h2><button id="dialog-close" aria-label="Fechar janela">×</button></div><div id="dialog-body"></div></dialog>
+<input id="file-input" type="file" hidden multiple>
+<input id="folder-input" type="file" hidden webkitdirectory multiple>
+<div id="toast" role="status"></div>
+<script type="module" src="./src/app.js"></script>
+</body></html>

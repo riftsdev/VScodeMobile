@@ -1,0 +1,13 @@
+{
+  "appId": "com.kgcode.mobile",
+  "appName": "KG Code",
+  "webDir": "dist",
+  "backgroundColor": "#10131b",
+  "ios": {
+    "contentInset": "never",
+    "scrollEnabled": false
+  },
+  "server": {
+    "iosScheme": "capacitor"
+  }
+}

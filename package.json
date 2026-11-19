@@ -1,0 +1,31 @@
+{
+  "name": "kg-code-mobile",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Editor mobile com projetos isolados e base Capacitor para iOS",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/core.test.mjs",
+    "test:browser": "playwright test",
+    "serve": "node scripts/serve.mjs",
+    "ios:add": "npm run build && cap add ios",
+    "ios:sync": "npm run build && cap sync ios",
+    "ios:open": "cap open ios"
+  },
+  "dependencies": {
+    "codemirror": "5.65.16",
+    "jszip": "3.10.1",
+    "es-module-lexer": "1.7.0",
+    "prettier": "3.6.2",
+    "@capacitor/core": "8.0.0",
+    "@capacitor/ios": "8.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.0.0",
+    "@playwright/test": "1.56.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
