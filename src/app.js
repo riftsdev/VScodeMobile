@@ -3,7 +3,7 @@ import {openStorage,saveState,checkpoint,read} from './storage.js';
 import {loadEditor,zipLibrary,formatter} from './deps.js';
 import {buildPreview} from './preview.js';
 const $=id=>document.getElementById(id);
-let state,cm,loading=false,dirty=false,saveTimer,saveRevision=0,runTimer,runVersion=0,worker,session=null,token='',importTarget='',importMode='files',assetURL;
+let state,cm,storageReady=false,loading=false,dirty=false,saveTimer,saveRevision=0,runTimer,runVersion=0,worker,session=null,token='',importTarget='',importMode='files',assetURL;
 const docs=new Map(),folded=new Set();
 const mobile=()=>matchMedia('(max-width:1100px)').matches;
 function node(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
@@ -21,6 +21,7 @@ function markDirty(){
 }
 async function flush(){
   if(!state)return;clearTimeout(saveTimer);const rev=saveRevision;
+  if(!storageReady){$('save-status').textContent='⚠ Sem salvamento — exporte backup';throw Error('O armazenamento não foi aberto. Os dados anteriores foram preservados. Exporte o trabalho atual antes de sair.');}
   $('save-status').textContent='Salvando…';
   try{await saveState(state);if(rev===saveRevision){dirty=false;$('save-status').textContent='✓ Salvo neste dispositivo';}}
   catch(e){dirty=true;$('save-status').textContent='⚠ Falha ao salvar — exporte backup';throw e;}
@@ -343,7 +344,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden&&dirty)flus
 addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
 addEventListener('resize',()=>cm?.refresh());
 async function initialize(){
-  try{state=await openStorage();}catch(e){state=freshState();toast('Armazenamento indisponível: '+e.message+'. Exporte seus arquivos antes de sair.');}
+  try{state=await openStorage();storageReady=true;}catch(e){state=freshState();toast('Armazenamento indisponível: '+e.message+'. Exporte seus arquivos antes de sair.');}
   try{localStorage.removeItem('kgcode_gh_token');}catch{}
   if(mobile())document.body.classList.add('sidebar-hidden');
   applySettings();render();openFile(state.current);guard(flush);

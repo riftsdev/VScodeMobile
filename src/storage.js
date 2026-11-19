@@ -34,7 +34,7 @@ export async function read(key) {
   });
 }
 export function saveState(state) {
-  const copy=structuredClone(state);copy.updated=Date.now();
+  const copy=validateState(structuredClone(state));copy.updated=Date.now();
   const task=queue.catch(()=>{}).then(()=>new Promise((resolve,reject)=>{
     if(!db){reject(Error('Armazenamento indisponível. Exporte um backup antes de fechar.'));return;}
     const tx=db.transaction('state','readwrite');tx.objectStore('state').put(copy,'workspace');
