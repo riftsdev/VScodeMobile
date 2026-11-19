@@ -119,7 +119,7 @@ function pathMenu(path,folder){
   else actions.push(['Abrir arquivo',()=>{closeModal();openFile(path);}]);
   actions.push(['Renomear / mover',async()=>{
     const target=prompt('Novo caminho (relativo à área de trabalho):',path);if(target===null)return;
-    await checkpoint(state);const next=normalize(target);movePath(state,path,next);
+    await checkpoint(state);const next=normalize(target);movePath(state,path,next);if(session&&inside(session.entry,path))stop();
     for(const key of [...docs.keys()])if(inside(key,path)){const doc=docs.get(key);docs.delete(key);docs.set(next+key.slice(path.length),doc);}
     closeModal();render();openFile(state.current);toast('Caminho atualizado. Confira referências nos seus arquivos.');
   }],['Duplicar',async()=>{
@@ -130,7 +130,7 @@ function pathMenu(path,folder){
     closeModal();render();markDirty();
   }],['Excluir',async()=>{
     if(!confirm('Excluir '+path+(folder?' e todos os arquivos dentro?':'?')))return;
-    await checkpoint(state);for(const p of Object.keys(state.files))if(inside(p,path)){delete state.files[p];docs.delete(p);}
+    await checkpoint(state);if(session&&inside(session.entry,path))stop();for(const key of ['previewStorage','githubBases','entries'])if(state[key])for(const p of Object.keys(state[key]))if(inside(p,path))delete state[key][p];for(const p of Object.keys(state.files))if(inside(p,path)){delete state.files[p];docs.delete(p);}
     state.folders=state.folders.filter(p=>!inside(p,path));state.tabs=state.tabs.filter(p=>!inside(p,path));
     if(inside(state.root,path))state.root='';
     state.selected=dirname(path);if(inside(state.current,path))state.current=state.tabs[0]||Object.keys(state.files)[0]||'';
@@ -399,7 +399,7 @@ function githubDialog(){
   }),'primary'));
   row.append(button('Enviar commit',()=>busy(async()=>{
     const c=settings();if(!token)throw Error('Informe um token com Contents: Read and write para este repositório.');
-    const root=state.root,items=Object.entries(state.files).filter(([p])=>inside(p,root));if(!items.length)throw Error('Pasta vazia.');
+    const root=state.root,items=Object.entries(structuredClone(state.files)).filter(([p])=>inside(p,root));if(!items.length)throw Error('Pasta vazia.');
     if(!confirm('Enviar '+items.length+' arquivo(s) de "'+(root||'área de trabalho')+'" para '+c.owner+'/'+c.repo+' ('+c.branch+')? Arquivos com o mesmo caminho serão atualizados.'))return;
     const url=base(c),refPath='/git/refs/heads/'+c.branch.split('/').map(encodeURIComponent).join('/');
     const ref=await gh(url+refPath),old=state.githubBases?.[root];

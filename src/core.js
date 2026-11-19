@@ -41,6 +41,7 @@ export function movePath(state, from, to) {
   state.tabs = state.tabs.map(convert); state.current = convert(state.current || '');
   state.root = convert(state.root || ''); state.selected = convert(state.selected || '');
   state.entries = Object.fromEntries(Object.entries(state.entries || {}).map(([k,v])=>[convert(k),convert(v)]));
+  for(const key of ['previewStorage','githubBases'])if(state[key])state[key]=Object.fromEntries(Object.entries(state[key]).map(([k,v])=>[convert(k),v]));
 }
 export function resolveLocal(reference, from, root='') {
   if (!reference || reference.startsWith('#') || /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(reference)) return null;

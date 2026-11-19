@@ -43,3 +43,11 @@ test('empty nested folders expose ancestors and imports reject path conflicts',(
   state.files={'a':{type:'text',content:'x'},'a/file.txt':{type:'text',content:'y'}};
   assert.throws(()=>validateState(state));
 });
+
+test('renaming a project preserves scoped storage and GitHub baseline',()=>{
+  const state=freshState();state.previewStorage={'Meu-site':{score:'42'}};state.githubBases={'Meu-site':{sha:'baseline'}};
+  movePath(state,'Meu-site','Renamed');
+  assert.deepEqual(state.previewStorage.Renamed,{score:'42'});
+  assert.equal(state.githubBases.Renamed.sha,'baseline');
+  assert.equal(state.previewStorage['Meu-site'],undefined);
+});
